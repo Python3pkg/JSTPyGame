@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from Texts import texts
-from Characters import *
-from Lexicon import *
+from .Texts import texts
+from .Characters import *
+from .Lexicon import *
 from termcolor import colored
 from random import shuffle
 
@@ -11,8 +11,8 @@ class Death(object):
     """Class for death scene"""
 
     def enter(self):
-        print '_'*40
-        print colored(texts.get(type(self).__name__), 'red')
+        print('_'*40)
+        print(colored(texts.get(type(self).__name__), 'red'))
         exit(0)
 
 
@@ -20,8 +20,8 @@ class Victory(object):
     """Class called when you win"""
 
     def enter(self):
-        print '_'*40
-        print texts.get(type(self).__name__)
+        print('_'*40)
+        print(texts.get(type(self).__name__))
         exit(0)
 
 
@@ -30,9 +30,9 @@ class DungeonGate(object):
         The player must pass the heavy guard to enter in the dungeon"""
 
     def enter(self, map_instance, player_instance, cheatcode):
-        print '_'*40
-        print texts.get(type(self).__name__)
-        action = raw_input("Réponse> ")
+        print('_'*40)
+        print(texts.get(type(self).__name__))
+        action = input("Réponse> ")
         analysed_action = scan(action)
         if ((('verb', 'lancer') in analysed_action or
             ('verb', 'lance') in analysed_action or
@@ -44,7 +44,7 @@ class DungeonGate(object):
                      ('noon', 'gravier') in analysed_action)
                 and (('noon', 'cheval') in analysed_action))\
                 or (action == cheatcode):
-            print texts.get("DungeonGate_cheval")
+            print(texts.get("DungeonGate_cheval"))
             return Corridor()
         elif (('verb', 'attaquer') in analysed_action or
               ('verb', 'attaque') in analysed_action or
@@ -57,13 +57,13 @@ class DungeonGate(object):
             fight_result = player_instance.fight(a_guard.name, a_guard.characteristics, cheatcode)
             if fight_result == 'alive':
                 player_instance.print_charac()
-                print texts.get("DungeonGate_combat")
+                print(texts.get("DungeonGate_combat"))
                 map_instance.explored_scenes['DungeonGate'] = "explored"
                 return Corridor()
             else:
                 return Death()
         else:
-            print colored("Je ne comprends pas votre ordre. retour en début de scéne.", 'red')
+            print(colored("Je ne comprends pas votre ordre. retour en début de scéne.", 'red'))
             return DungeonGate()
 
 
@@ -92,8 +92,8 @@ class Corridor(object):
             if not enemies:
                 return Victory()
             else:
-                print '_'*40
-                print texts.get("Corridor_fight").format(len(enemies))
+                print('_'*40)
+                print(texts.get("Corridor_fight").format(len(enemies)))
 
                 for enemi in enemies:
                     fight_result = player_instance.fight(enemi.name, enemi.characteristics, cheatcode)
@@ -107,16 +107,16 @@ class Corridor(object):
                 return Victory()
 
         else:
-            print '_'*40
-            print texts.get(type(self).__name__)
-            answer = raw_input("Réponse> ")
+            print('_'*40)
+            print(texts.get(type(self).__name__))
+            answer = input("Réponse> ")
 
             if answer == cheatcode:
-                print colored("ORDRE DES SALLES:", attrs=['bold'])
+                print(colored("ORDRE DES SALLES:", attrs=['bold']))
                 i = 1
 
                 for scene in map_instance.corridor_scenes:
-                    print i, "-", type(scene).__name__
+                    print(i, "-", type(scene).__name__)
                     i += 1
 
                 return Corridor()
@@ -126,10 +126,10 @@ class Corridor(object):
             if map_instance.explored_scenes[type(next_scene).__name__] == "unexplored":
                 return next_scene
             elif map_instance.explored_scenes[type(next_scene).__name__] == "explored":
-                print colored("Salle déja explorée", 'magenta')
+                print(colored("Salle déja explorée", 'magenta'))
                 return Corridor()
             else:
-                print colored("Je ne comprends pas votre ordre. retour en début de scéne.", 'red')
+                print(colored("Je ne comprends pas votre ordre. retour en début de scéne.", 'red'))
                 return Corridor()
 
 
@@ -138,8 +138,8 @@ class GuardsRoom(object):
     The key required to release the player's wife is in this room with 2 guards"""
 
     def enter(self, map_instance, player_instance, cheatcode):
-        print '_'*40
-        print texts.get("GuardsRoom_intro")
+        print('_'*40)
+        print(texts.get("GuardsRoom_intro"))
 
         for i in range(2):
             a_guard = Guard()
@@ -153,7 +153,7 @@ class GuardsRoom(object):
         map_instance.explored_scenes[type(self).__name__] = "explored"
         player_instance.key = 'yes'
         player_instance.print_charac()
-        print texts.get("GuardsRoom_outro")
+        print(texts.get("GuardsRoom_outro"))
         return Corridor()
 
 
@@ -162,14 +162,14 @@ class Cell(object):
     You must have the cell's key to release your wife."""
 
     def enter(self, map_instance, player_instance):
-        print '_'*40
-        print texts.get("Cell_intro")
+        print('_'*40)
+        print(texts.get("Cell_intro"))
 
         if player_instance.key == 'yes':
-            print texts.get("Cell_with_key")
+            print(texts.get("Cell_with_key"))
             map_instance.explored_scenes['Cell'] = "explored"
         else:
-            print texts.get("Cell_without_key")
+            print(texts.get("Cell_without_key"))
 
         return Corridor()
 
@@ -180,13 +180,13 @@ class Dormitory(object):
     after fighting the guard, you gain an armor"""
 
     def enter(self, map_instance, player_instance, cheatcode):
-        print '_'*40
-        print texts.get(type(self).__name__)
+        print('_'*40)
+        print(texts.get(type(self).__name__))
         a_guard = Guard()
         fight_result = player_instance.fight(a_guard.name, a_guard.characteristics, cheatcode)
 
         if fight_result == 'alive':
-            print texts.get("Dormitory_armor")
+            print(texts.get("Dormitory_armor"))
             player_instance.characteristics['armor'] += 2
             player_instance.print_charac()
             map_instance.explored_scenes[type(self).__name__] = "explored"
@@ -200,9 +200,9 @@ class Armory(object):
     This locked room by a code contains a sword"""
 
     def enter(self, map_instance, player_instance, cheatcode):
-        print '_'*40
-        print texts.get(type(self).__name__)
-        answer = raw_input('Réponse? ')
+        print('_'*40)
+        print(texts.get(type(self).__name__))
+        answer = input('Réponse? ')
         if answer == '1':
             enemies = []
             # Define the number of enemies in the room
@@ -220,14 +220,14 @@ class Armory(object):
                 enemies.append(a_guard)
 
             if not enemies:
-                print texts.get('Armory_weapon')
+                print(texts.get('Armory_weapon'))
                 player_instance.characteristics['weapon'] += 2
                 player_instance.print_charac()
                 map_instance.explored_scenes['Armory'] = "explored"
                 return Corridor()
             else:
-                print '_'*40
-                print texts.get("Armory_fight").format(len(enemies))
+                print('_'*40)
+                print(texts.get("Armory_fight").format(len(enemies)))
                 for enemi in enemies:
                     fight_result = player_instance.fight(enemi.name, enemi.characteristics, cheatcode)
 
@@ -245,10 +245,10 @@ class Armory(object):
             attempts = 0
             code = "{}{}{}".format(randint(0, 9), randint(0, 9), randint(0, 9))
             while attempts < 10:
-                answer = raw_input("Code? ")
+                answer = input("Code? ")
 
                 if answer == code or answer == cheatcode:
-                    print texts.get('Armory_weapon')
+                    print(texts.get('Armory_weapon'))
                     player_instance.characteristics['weapon'] += 2
                     map_instance.explored_scenes['Armory'] = "explored"
                     player_instance.print_charac()
@@ -261,15 +261,15 @@ class Armory(object):
                         for i in range(len(code)):
                             if character == code[i]:
                                 hint[i] = character
-                    print "Hint:", "".join(map(str, hint))
+                    print("Hint:", "".join(map(str, hint)))
 
-            print "vous avez fait trop de tentatives. Revenez plus tard."
+            print("vous avez fait trop de tentatives. Revenez plus tard.")
             return Corridor()
 
         elif answer == '3':
             return Corridor()
         else:
-            print colored("Je ne comprends pas votre ordre. retour en début de scéne.", 'red')
+            print(colored("Je ne comprends pas votre ordre. retour en début de scéne.", 'red'))
             return Armory()
 
 
@@ -277,7 +277,7 @@ class EmptyRoom(object):
     """Class for empry rooms linked to corridor."""
 
     def enter(self):
-        print texts.get(type(self).__name__)
+        print(texts.get(type(self).__name__))
         return Corridor()
 
 

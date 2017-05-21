@@ -20,39 +20,39 @@ class Player(Human):
     def __init__(self):
         super(Player, self).__init__(randint(10, 15))
         self.key = 'no'
-        print '_'*40
+        print('_'*40)
         self.print_charac()
 
     def print_charac(self):
         """Method to print the player characteristics"""
 
-        print colored("Votre héros a les caractéristiques suivantes:\n\t- {} points de vie\n\t- {} bonus d'attaque"
+        print(colored("Votre héros a les caractéristiques suivantes:\n\t- {} points de vie\n\t- {} bonus d'attaque"
                       "\n\t- {} point d'armure".format(self.characteristics['life'],
                                                        self.characteristics['weapon'],
                                                        self.characteristics['armor']),
-                      'blue')
+                      'blue'))
 
     def fight(self, opponent_name, opponent_characteristics, cheatcode):
         """Method called to manage fights between player and opponents"""
 
         self.print_charac()
-        print colored("L'énnemi est un {} et a les caractéristiques suivantes:\n\t- {} points de vie"
+        print(colored("L'énnemi est un {} et a les caractéristiques suivantes:\n\t- {} points de vie"
                       "\n\t- {} bonus d'attaque\n\t- {} point d'armure".format(opponent_name,
                                                                                opponent_characteristics['life'],
                                                                                opponent_characteristics['weapon'],
                                                                                opponent_characteristics['armor']),
-                      'magenta')
-        wait = raw_input("Press enter to continue.")
+                      'magenta'))
+        wait = input("Press enter to continue.")
 
         # gestion du cheatcode
         if wait == cheatcode:
             return 'alive'
 
-        print colored("LE COMBAT:", attrs=['bold'])
+        print(colored("LE COMBAT:", attrs=['bold']))
 
         while self.characteristics['life'] > 0:
             attack = randint(1, 6) + self.characteristics['weapon']
-            print colored("Vous avez effectué une attaque de {}".format(attack), 'blue')
+            print(colored("Vous avez effectué une attaque de {}".format(attack), 'blue'))
             # check if opponent dodge the attack or not
             dodge = randint(1, 10)
 
@@ -71,13 +71,13 @@ class Player(Human):
                 if attack > opponent_characteristics['armor']:
                     opponent_characteristics['life'] -= (attack - opponent_characteristics['armor'])
             else:
-                print colored("Le {} a paré l'attaque.".format(opponent_name), 'magenta')
+                print(colored("Le {} a paré l'attaque.".format(opponent_name), 'magenta'))
 
             if opponent_characteristics['life'] > 0:
-                print colored("\tIl reste {} points de vie à votre adversaire".format(opponent_characteristics['life']),
-                              'magenta')
+                print(colored("\tIl reste {} points de vie à votre adversaire".format(opponent_characteristics['life']),
+                              'magenta'))
                 enemi_attack = randint(1, 6) + opponent_characteristics['weapon']
-                print colored("Le {} effectue une attaque de {}".format(opponent_name, enemi_attack), 'magenta')
+                print(colored("Le {} effectue une attaque de {}".format(opponent_name, enemi_attack), 'magenta'))
                 # check if you dodge the attack or not
                 dodge = randint(1, 10)
 
@@ -96,14 +96,14 @@ class Player(Human):
                     self.characteristics['life'] -= (enemi_attack - self.characteristics['armor'])
 
                     if self.characteristics['life'] > 0:
-                        print colored("\tIl vous reste {} points de vie".format(self.characteristics['life']), 'blue')
+                        print(colored("\tIl vous reste {} points de vie".format(self.characteristics['life']), 'blue'))
                     else:
-                        print colored("\tVous êtes mort", 'red')
+                        print(colored("\tVous êtes mort", 'red'))
                         return 'dead'
                 else:
-                    print colored("Vous avez paré l'attaque.", 'blue')
+                    print(colored("Vous avez paré l'attaque.", 'blue'))
             else:
-                print colored("Vous avez vaincu le garde", 'green')
+                print(colored("Vous avez vaincu le garde", 'green'))
                 return 'alive'
 
 

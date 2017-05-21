@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from Scenes import *
+from .Scenes import *
 
 
 class Engine(object):
@@ -11,7 +11,7 @@ class Engine(object):
         self.player = player
         # To define the keyboard entry to bypass the scene
         self.cheatcode = "p"
-        print texts.get(type(self).__name__)
+        print(texts.get(type(self).__name__))
 
     def play(self):
         """This method manages the progress in the map"""

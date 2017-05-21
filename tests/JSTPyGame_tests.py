@@ -4,13 +4,13 @@ import JSTPyGame
 
 
 def setup():
-    print "SETUP!"
+    print("SETUP!")
 
 
 def teardown():
-    print "TEAR DOWN!"
+    print("TEAR DOWN!")
 
 
 def test_basic():
-    print "I RAN!"
+    print("I RAN!")
 
